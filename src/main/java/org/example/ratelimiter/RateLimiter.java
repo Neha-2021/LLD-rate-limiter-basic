@@ -1,13 +1,15 @@
 package org.example.ratelimiter;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import org.example.strategies.RateLimitingStrategy;
 
 public class RateLimiter {
-    private final Map<String, TokenBucket> buckets = new ConcurrentHashMap<>();
+    private final RateLimitingStrategy strategy;
+
+    public RateLimiter(RateLimitingStrategy strategy) {
+        this.strategy = strategy;
+    }
 
     public boolean allowRequest(String userId) {
-        buckets.putIfAbsent(userId, new TokenBucket(5, 0.083));
-        return buckets.get(userId).consumeToken();
+       return strategy.allowRequest(userId);
     }
 }

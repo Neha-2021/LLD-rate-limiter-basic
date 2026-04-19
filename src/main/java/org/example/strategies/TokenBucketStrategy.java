@@ -30,8 +30,7 @@ public class TokenBucketStrategy implements RateLimitingStrategy {
 
             long currentTimeInMillis = System.currentTimeMillis();
             long timeElapsedInMillis = currentTimeInMillis - state.lastRefilledTimeStampInMillis;
-            long timeElapsedInSec = timeElapsedInMillis/1000;
-            int tokensToRefill = (int) (config.getRefillRate() * timeElapsedInSec);
+            int tokensToRefill = (int) (config.getRefillRate()/1000 * timeElapsedInMillis);
 
             if (tokensToRefill > 0) {
                 state.tokens = Math.min(tokensToRefill + state.tokens, config.getCapacity());
